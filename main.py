@@ -3,26 +3,23 @@ from umqtt.simple import MQTTClient
 from machine import SoftI2C, Pin
 from aht10 import AHT10
 from ota import OTAUpdater
+from WIFI_CONFIG import SSID, PASSWORD  # Wichtig: Aus separater Datei importieren
 
-#Versionsänderung_V2
-#Die Version wurde angepasst
 # Konfiguration
-WIFI_SSID = 'BZTG-IoT'
-WIFI_PASSWORD = 'WerderBremen24'
+FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/main"  # Branch hinzugefügt
 MQTT_BROKER = '192.168.1.145'
 MQTT_PORT = 1883
 MQTT_TOPIC = b'BZTG/Ehnern/E101'
 CLIENT_ID = b'ESP32 S3 Jerrit'
 I2C_SCL_PIN = 8
 I2C_SDA_PIN = 3
-FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/"
 
 def connect_wifi():
     wlan = network.WLAN(network.STA_IF)
     wlan.active(True)
     if not wlan.isconnected():
         print('Verbinde mit WiFi...')
-        wlan.connect(WIFI_SSID, WIFI_PASSWORD)
+        wlan.connect(SSID, PASSWORD)  # Aus WIFI_CONFIG importiert
         for _ in range(20):
             if wlan.isconnected():
                 break
@@ -82,13 +79,9 @@ def mittelwert(liste, new_value):
     return sum(calc_list) / len(calc_list), liste
 
 def main():
-    # WLAN für OTA verbinden
-    wlan_ota = connect_wifi()
-    if wlan_ota:
-        # OTA-Update prüfen
-        ota_updater = OTAUpdater(WIFI_SSID, WIFI_PASSWORD, FIRMWARE_URL, "main.py")
-        ota_updater.download_and_install_update_if_available()
-        disconnect_wifi(wlan_ota)
+    # OTA-Update zuerst prüfen
+    ota_updater = OTAUpdater(SSID, PASSWORD, FIRMWARE_URL, "main.py")
+    ota_updater.download_and_install_update_if_available()
     
     # Hauptprogramm
     sensor = init_sensors()
