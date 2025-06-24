@@ -4,6 +4,7 @@ from machine import SoftI2C, Pin
 from aht10 import AHT10
 from ota import OTAUpdater
 
+#Versionsänderung_V2
 # Konfiguration
 WIFI_SSID = 'BZTG-IoT'
 WIFI_PASSWORD = 'WerderBremen24'
@@ -13,7 +14,7 @@ MQTT_TOPIC = b'BZTG/Ehnern/E101'
 CLIENT_ID = b'ESP32 S3 Jerrit'
 I2C_SCL_PIN = 8
 I2C_SDA_PIN = 3
-FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/main"
+FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/"
 
 def connect_wifi():
     wlan = network.WLAN(network.STA_IF)
