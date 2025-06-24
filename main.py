@@ -5,6 +5,7 @@ from aht10 import AHT10
 from ota import OTAUpdater
 
 #Versionsänderung_V2
+#Die Version wurde angepasst
 # Konfiguration
 WIFI_SSID = 'BZTG-IoT'
 WIFI_PASSWORD = 'WerderBremen24'
