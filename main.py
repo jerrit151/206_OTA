@@ -3,10 +3,10 @@ from umqtt.simple import MQTTClient
 from machine import SoftI2C, Pin
 from aht10 import AHT10
 from ota import OTAUpdater
-from WIFI_CONFIG import SSID, PASSWORD  # Wichtig: Aus separater Datei importieren
+from WIFI_CONFIG import SSID, PASSWORD
 
 # Konfiguration
-FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/main"  # Branch hinzugefügt
+FIRMWARE_URL = "https://raw.githubusercontent.com/jerrit151/206_OTA/main"
 MQTT_BROKER = '192.168.1.145'
 MQTT_PORT = 1883
 MQTT_TOPIC = b'BZTG/Ehnern/E101'
@@ -19,7 +19,7 @@ def connect_wifi():
     wlan.active(True)
     if not wlan.isconnected():
         print('Verbinde mit WiFi...')
-        wlan.connect(SSID, PASSWORD)  # Aus WIFI_CONFIG importiert
+        wlan.connect(SSID, PASSWORD)
         for _ in range(20):
             if wlan.isconnected():
                 break
@@ -80,8 +80,15 @@ def mittelwert(liste, new_value):
 
 def main():
     # OTA-Update zuerst prüfen
-    ota_updater = OTAUpdater(SSID, PASSWORD, FIRMWARE_URL, "main.py")
-    ota_updater.download_and_install_update_if_available()
+    try:
+        print("\n" + "="*40)
+        print("Starte OTA-Check...")
+        ota_updater = OTAUpdater(SSID, PASSWORD, FIRMWARE_URL, "main.py")
+        ota_updater.download_and_install_update_if_available()
+        print("OTA-Check abgeschlossen")
+        print("="*40 + "\n")
+    except Exception as e:
+        print("Schwerer OTA-Fehler:", str(e))
     
     # Hauptprogramm
     sensor = init_sensors()
